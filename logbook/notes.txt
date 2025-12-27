@@ -1,0 +1,121 @@
+PHASE 0 — Foundation (You are here)
+Step 0.1 — Project setup
+
+Folder structure
+
+Build/run pipeline
+
+✅ Done
+
+Step 0.2 — CLI argument parsing
+
+Commands: new, view, check
+
+Proper usage errors
+
+✅ Done
+
+Step 0.3 — Date validation (full)
+
+DDMMYYYY
+
+Leap years
+
+Month/day correctness
+
+🟡 In progress (almost done)
+
+PHASE 1 — Filesystem & Persistence
+Step 1.1 — Directory creation
+
+logs/YYYY/MM/
+
+std::filesystem
+
+Step 1.2 — File path derivation
+
+Map date → path
+
+Zero ambiguity
+
+Step 1.3 — new command (write log)
+
+Prompt user
+
+Write structured file
+
+Prevent overwrite
+
+Step 1.4 — view command (read log)
+
+Read file
+
+Display nicely
+
+Step 1.5 — check command (format validation)
+
+Structural correctness
+
+Parentheses balance
+
+Summary brackets
+
+PHASE 2 — Parsing & Data Modeling
+Step 2.1 — Event parsing
+
+Nested parentheses
+
+Depth-based splitting
+
+Step 2.2 — Internal structures
+
+LogDay
+
+Event
+
+Step 2.3 — Semantic checks (optional)
+
+Wake/sleep conventions
+
+Warnings, not errors
+
+PHASE 3 — Exports & Search
+Step 3.1 — Master file generation
+
+Derived artifact
+
+Rebuildable
+
+Step 3.2 — Search
+
+Keyword
+
+Date ranges
+
+Event-based
+
+PHASE 4 — Intelligence (later)
+Step 4.1 — Memory resurfacing
+
+“On this day”
+
+Similar days
+
+Step 4.2 — Stats
+
+Sleep patterns
+
+Activity streaks
+
+PHASE 5 — UX & Polish
+Step 5.1 — Interactive shell (optional)
+
+REPL mode
+
+Command history
+
+Step 5.2 — Config & customization
+
+Tags
+
+Aliases
