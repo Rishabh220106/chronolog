@@ -1,4 +1,4 @@
-PHASE 0 — Foundation (You are here)
+PHASE 0 — Foundation 
 Step 0.1 — Project setup
 
 Folder structure
@@ -9,7 +9,7 @@ Build/run pipeline
 
 Step 0.2 — CLI argument parsing
 
-Commands: new, view, check
+Commands: new, view, check (You are here)
 
 Proper usage errors
 
@@ -119,3 +119,248 @@ Step 5.2 — Config & customization
 Tags
 
 Aliases
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Phase 1 — Core Logging (Detailed Breakdown)
+
+Goal:
+Make ./logbook new <date> reliably create and write daily logs in the correct structure.
+
+Phase 1 — Step Map (High-Level)
+Phase 1
+│
+├── 1.1  Date → Path Resolution
+├── 1.2  Directory Creation
+├── 1.3  Log File Path Construction
+├── 1.4  Log File Open Mode Handling
+├── 1.5  New File Header Writing
+├── 1.6  Interactive Event Input
+├── 1.7  Event Persistence Rules
+└── 1.8  Safe Exit & Error Handling
+
+
+Each step is small, testable, and isolated.
+
+Step 1.1 — Date → Path Resolution
+Responsibility
+
+Convert a validated date string (ddmmyyyy) into structured components.
+
+Input
+"25012025"
+
+Output
+year  = "2025"
+month = "01"
+day   = "25"
+
+Why this step is isolated
+
+Path logic must not depend on filesystem logic
+
+Makes testing easier
+
+Future reuse (view/check commands)
+
+Completion Criteria
+
+Correct extraction for any valid date
+
+No filesystem operations here
+
+Step 1.2 — Directory Creation
+Responsibility
+
+Ensure required directory hierarchy exists:
+
+logs/YYYY/MM/
+
+Rules
+
+Use std::filesystem
+
+Must be idempotent
+
+Should not throw or crash if already exists
+
+Why this matters
+
+Prevents file-open failures
+
+Makes structure predictable for future features
+
+Completion Criteria
+
+Running the command twice does not error
+
+Directories exist after execution
+
+Step 1.3 — Log File Path Construction
+Responsibility
+
+Construct the exact log file path.
+
+Example
+logs/2025/01/25012025.log
+
+Rules
+
+No file I/O yet
+
+Pure string/path construction
+
+Why separate?
+
+Path correctness is critical
+
+Reused by view and check
+
+Completion Criteria
+
+Path matches agreed format
+
+Works for all dates
+
+Step 1.4 — Log File Open Mode Handling
+Responsibility
+
+Open the log file correctly depending on existence.
+
+Behavior
+File Exists	Action
+Yes	Open in append mode
+No	Create new file
+Why this step exists
+
+Prevent accidental overwrites
+
+Preserve past logs
+
+Completion Criteria
+
+Existing logs remain intact
+
+New logs are created cleanly
+
+Step 1.5 — New File Header Writing
+Responsibility
+
+Write a header only if file is new.
+
+Format
+Date: 25-01-2025
+------------------
+
+Rules
+
+Header must never duplicate
+
+Human-readable
+
+Parsing-friendly
+
+Completion Criteria
+
+Header appears exactly once
+
+Existing files are untouched
+
+Step 1.6 — Interactive Event Input
+Responsibility
+
+Accept multiple user events interactively.
+
+Rules
+
+One event per line
+
+Nested parentheses allowed
+
+No interpretation or parsing
+
+End Condition
+
+Empty line terminates input
+
+Completion Criteria
+
+Accepts unlimited lines
+
+Stops correctly on empty input
+
+Step 1.7 — Event Persistence Rules
+Responsibility
+
+Persist events exactly as entered.
+
+Rules
+
+Preserve order
+
+Preserve spacing
+
+No formatting changes
+
+Example
+
+Input:
+
+park(running(2 km))
+
+
+Stored exactly as:
+
+park(running(2 km))
+
+Completion Criteria
+
+Output matches input byte-for-byte
+
+Events appended correctly
+
+Step 1.8 — Safe Exit & Error Handling
+Responsibility
+
+Exit cleanly with clear messages.
+
+Situations to handle
+
+File open failure
+
+Permission issues
+
+Unexpected EOF
+
+Rules
+
+No silent failures
+
+No crashes
+
+Completion Criteria
+
+Graceful termination
+
+Useful console feedback
