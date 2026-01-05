@@ -2,6 +2,7 @@
 #include <string>
 #include <cctype>
 
+
 #include "date.h"
 #include "filesystem.h"
 
@@ -21,17 +22,34 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    // TEMPORARY test for Step 1.2
-    if (!ensureLogDirectory(date.year, date.month)) {
-        std::cerr << "Failed to create log directory\n";
-        return 1;
-    }
+    //TEMPORARY test for Step 1.2
+    // if (!ensureLogDirectory(date.year, date.month)) {
+    //     std::cerr << "Failed to create log directory\n";
+    //     return 1;
+    // }
 
     std::cout << "Command: " << command << "\n";
     std::cout << "Date: "
               << date.day << "-"
               << date.month << "-"
               << date.year << "\n";
+
+
+    std::filesystem::path logPath = getLogFilePath(date);
+    std::cout << "Log file path: " << logPath << "\n";
+
+
+
+    if (command == "new")
+    {
+        if (!createDailyLog(date))
+        {
+            std::cerr << "Failed to create log\n";
+            return 1;
+        }
+
+    }
+
 
     return 0;
 }
