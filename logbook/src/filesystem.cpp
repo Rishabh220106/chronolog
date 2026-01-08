@@ -28,58 +28,56 @@ bool ensureLogDirectory(int year, int month)
 
 std::filesystem::path getLogFilePath(const Date& date)
 {
-    std::string monthStr =
-        (date.month < 10)
-            ? "0" + std::to_string(date.month)
-            : std::to_string(date.month);
+    std::string year  = std::to_string(date.year);
+    std::string month = (date.month < 10 ? "0" : "") + std::to_string(date.month);
+    std::string day   = (date.day   < 10 ? "0" : "") + std::to_string(date.day);
 
-    std::string dayStr =
-        (date.day < 10)
-            ? "0" + std::to_string(date.day)
-            : std::to_string(date.day);
-
-    std::string fileName =
-        dayStr + monthStr + std::to_string(date.year) + ".txt";
-
-    return std::filesystem::path("logs")
-           / std::to_string(date.year)
-           / monthStr
-           / fileName;
+    std::string filename = day + month + year + ".txt";
+    return fs::path("logs") / year / month / filename;
 }
 
 
 
 
 
-bool createDailyLog(const Date& date)
+bool writeLog(const Date& date)
 {
     std::string year  = std::to_string(date.year);
     std::string month = (date.month < 10 ? "0" : "") + std::to_string(date.month);
     std::string day   = (date.day   < 10 ? "0" : "") + std::to_string(date.day);
 
     std::string filename = day + month + year + ".txt";
-
     fs::path logPath = fs::path("logs") / year / month / filename;
 
     try
     {
         fs::create_directories(logPath.parent_path());
 
-        if (fs::exists(logPath))
-        {
-            std::cout << "Log already exists\n";
-            return true;
-        }
+        bool isNew = !fs::exists(logPath);
 
-        std::ofstream file(logPath);
+        std::ofstream file(logPath, std::ios::app);
         if (!file)
             return false;
 
-        file << "Date: " << day << month << year << "\n";
-        file << "------------------\n";
+        if (isNew)
+        {
+            file << day << "/" << month << "/" << year << "\n";
+        }
 
-        file.close();
-        std::cout << "Log created: " << logPath << "\n";
+        std::cout << "Enter events (type :q to finish):\n";
+
+        std::string line;
+        
+        while (true)
+        {
+            std::getline(std::cin, line);
+            if (line == ":q")
+                break;
+
+            file << line << "," << " ";
+        }
+
+        std::cout << "Log updated successfully.\n";
         return true;
     }
     catch (const fs::filesystem_error& e)
@@ -87,5 +85,35 @@ bool createDailyLog(const Date& date)
         std::cerr << e.what() << "\n";
         return false;
     }
+}
 
+
+
+
+bool viewLog(const Date& date)
+{
+    std::string year  = std::to_string(date.year);
+    std::string month = (date.month < 10 ? "0" : "") + std::to_string(date.month);
+    std::string day   = (date.day   < 10 ? "0" : "") + std::to_string(date.day);
+
+    std::string filename = day + month + year + ".txt";
+    fs::path logPath = fs::path("logs") / year / month / filename;
+
+    if (!fs::exists(logPath))
+    {
+        std::cerr << "No log found for this date.\n";
+        return false;
+    }
+
+    std::ifstream file(logPath);
+    if (!file)
+        return false;
+
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::cout << line << "\n";
+    }
+
+    return true;
 }

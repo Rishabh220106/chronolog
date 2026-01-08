@@ -9,7 +9,7 @@
 int main(int argc, char* argv[])
 {
     if (argc != 3) {
-        std::cerr << "Usage: logbook <new|view|check> <DDMMYYYY>\n";
+        std::cerr << "Usage: logbook <log|view|check> <DDMMYYYY>\n";
         return 1;
     }
 
@@ -40,15 +40,18 @@ int main(int argc, char* argv[])
 
 
 
-    if (command == "new")
+    if (command == "log")
     {
-        if (!createDailyLog(date))
-        {
-            std::cerr << "Failed to create log\n";
+        if (!writeLog(date))
             return 1;
-        }
-
     }
+    
+    if (command == "view")
+    {
+        if (!viewLog(date))
+            return 1;
+    }
+
 
 
     return 0;
