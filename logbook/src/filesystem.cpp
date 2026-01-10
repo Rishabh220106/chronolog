@@ -117,3 +117,41 @@ bool viewLog(const Date& date)
 
     return true;
 }
+
+
+
+
+bool checkLog(const Date& date)
+{
+    std::string year  = std::to_string(date.year);
+    std::string month = (date.month < 10 ? "0" : "") + std::to_string(date.month);
+    std::string day   = (date.day   < 10 ? "0" : "") + std::to_string(date.day);
+
+    std::string filename = day + month + year + ".txt";
+    fs::path logPath = fs::path("logs") / year / month / filename;
+
+    if (!fs::exists(logPath))
+    {
+        std::cerr << "Log file does not exist.\n";
+        return false;
+    }
+
+    if (!fs::is_regular_file(logPath))
+    {
+        std::cerr << "Path exists but is not a regular file.\n";
+        return false;
+    }
+
+    std::ifstream file(logPath);
+    if (!file)
+    {
+        std::cerr << "Log file exists but cannot be opened.\n";
+        return false;
+    }
+
+    std::cout << "Log check passed:\n";
+    std::cout << "Path: " << logPath << "\n";
+    std::cout << "Readable: yes\n";
+
+    return true;
+}

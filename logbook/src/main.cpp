@@ -30,8 +30,8 @@ int main(int argc, char* argv[])
 
     std::cout << "Command: " << command << "\n";
     std::cout << "Date: "
-              << date.day << "-"
-              << date.month << "-"
+              << date.day << "/"
+              << date.month << "/"
               << date.year << "\n";
 
 
@@ -52,6 +52,11 @@ int main(int argc, char* argv[])
             return 1;
     }
 
+    if (command == "check")
+    {
+        if (!checkLog(date))
+            return 1;
+    }
 
 
     return 0;

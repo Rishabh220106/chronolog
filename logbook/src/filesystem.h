@@ -14,5 +14,7 @@ bool writeLog(const Date& date);
 
 bool viewLog(const Date& date);
 
+bool checkLog(const Date& date);
+
 
 #endif
